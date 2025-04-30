@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+env/
+venv/
+ENV/
+.env/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+data/decks.json
+*.log
+docs/_build/
