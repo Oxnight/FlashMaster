@@ -24,7 +24,7 @@ Pour installer et exécuter FlashMaster, suivez ces étapes :
    ```
 3. **Installer les dépendances** :
    ```bash
-   pip install -r requirements.txt```
+   pip install -r requirements.txt
    ```
 4. **Lancer l'application** :
    ```bash
