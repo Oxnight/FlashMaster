@@ -1,4 +1,5 @@
 import os
+import uuid
 import json
 from datetime import datetime
 import random
@@ -46,11 +47,19 @@ class DeckManager:
         """
         Sauvegarde les decks dans le fichier JSON pour assurer la persistance des données.
         """
+        temp_file = self.decks_file + ".tmp"
         try:
-            with open(self.decks_file, 'w', encoding='utf-8') as f:
+            with open(temp_file, 'w', encoding='utf-8') as f:
                 json.dump(self.decks, f, ensure_ascii=False, indent=2)
+
+            if os.path.exists(self.decks_file):
+                os.remove(self.decks_file)
+            os.rename(temp_file, self.decks_file)
+
         except Exception as e:
-            print(f"Erreur lors de la sauvegarde des decks: {e}")
+            print(f"Erreur critique sauvegarde: {e}")
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
 
     def get_decks(self):
         """
@@ -69,7 +78,7 @@ class DeckManager:
         Returns:
             L’ID du nouveau deck créé.
         """
-        deck_id = str(len(self.decks) + 1)
+        deck_id = str(uuid.uuid4())
         new_deck = {
             "id": deck_id,
             "name": name,
@@ -165,8 +174,7 @@ class DeckManager:
         if not deck:
             return None
 
-        cards = deck["cards"]
-        card_id = str(len(cards) + 1) if cards else "1"
+        card_id = str(uuid.uuid4())
 
         new_card = {
             "id": card_id,
@@ -178,7 +186,7 @@ class DeckManager:
             "media": []
         }
 
-        cards.append(new_card)
+        deck["cards"].append(new_card)
         self.save_decks()
         return card_id
 
@@ -360,7 +368,7 @@ class DeckManager:
                 if "media" not in card:
                     card["media"] = []
 
-                media_id = str(len(card["media"]) + 1)
+                media_id = str(uuid.uuid4())
                 media = {
                     "id": media_id,
                     "type": media_type,
